@@ -7,6 +7,7 @@
 
 import wmi, psutil, hashlib, logging, socket, time
 from datetime import datetime
+import os, signal
 
 #speichert alle bekannten hashes
 known_hashes = []
@@ -77,6 +78,12 @@ def logEvent(message):
 def killProcess(process_created):
     try:
         process_created.Terminate()
+    except:
+        pass
+    
+def killProcessPID(pid):
+    try:
+        os.kill(int(pid), signal.SIGKILL)
     except:
         pass
 
@@ -193,11 +200,13 @@ while 1:
 
   # blacklisting processes
   #not_allowed_processes = ["calculator.exe", "cmd.exe", "powershell.exe", "vssadmin.exe"]
-  not_allowed_processes = ["vssadmin.exe", "wmic.exe", "powershell.exe", "cmd.exe", "vssvc.exe", "bcedit.exe", "wbadmin.exe"]
+  not_allowed_processes = ["vssadmin.exe", "wmic.exe", "powershell.exe", "cmd.exe", "vssvc.exe", "bcedit.exe", "wbadmin.exe", "icacls.exe"]
     
   if str(process_created.Name).lower() in not_allowed_processes:
         logEvent("NOT ALLOWED PROCESS DETECTED (KILL): " + process_info)
         killProcess(process_created)
+        # killt den parent process
+        killProcessPID(int(process_created.ParentProcessId))
 
 
 
