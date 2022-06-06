@@ -193,7 +193,7 @@ while 1:
 
   # blacklisting processes
   #not_allowed_processes = ["calculator.exe", "cmd.exe", "powershell.exe", "vssadmin.exe"]
-  not_allowed_processes = ["vssadmin.exe"]
+  not_allowed_processes = ["vssadmin.exe", "wmic.exe", "powershell.exe", "cmd.exe", "vssvc.exe", "bcedit.exe", "wbadmin.exe"]
     
   if str(process_created.Name).lower() in not_allowed_processes:
         logEvent("NOT ALLOWED PROCESS DETECTED (KILL): " + process_info)
